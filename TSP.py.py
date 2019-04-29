@@ -96,7 +96,7 @@ def crossOver(parents):
     sind34= rand.randint(0,3)
     eind34=rand.randint(sind34,4)
     if(sind34==eind34):
-        eind34++1
+        eind34+=1
 
     offs1=[0,0,0,0,0]
     offs2=[0,0,0,0,0]
