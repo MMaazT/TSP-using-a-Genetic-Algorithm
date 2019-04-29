@@ -9,23 +9,20 @@ from itertools import permutations
 import random as rand
 import matplotlib.pyplot as plt
 
-
-
-
 cityDict ={'A': [('B', 8), ('C',10), ('D', 3), ('E', 4), ('F',6)],
         'B': [('A', 8), ('C',9), ('D', 5), ('E', 5), ('F',12)],
         'C': [('A', 10), ('B',9), ('D', 7), ('E', 6), ('F',2)],
         'D': [('A', 3), ('B',5), ('C', 7), ('E', 8), ('F',11)],
         'E': [('A', 4), ('B',8), ('C', 6), ('D', 8), ('F',8)],
         'F': [('A', 6), ('B',12), ('C', 2), ('D', 11), ('E',8)]}
-#permut=rand.sample(list(permutations('ABDEF')), 10)
+
 
 def main():
     permut=rand.sample(list(permutations('ABDEF')), 10)
     #print(permut)
     best=[]
     average=[]
-    for i in range(1000):
+    for i in range(100):
         initialTourCost= fitnessFunction(permut)
         parents=parentSelection(initialTourCost)
         crossed= crossOver(parents)
@@ -34,10 +31,16 @@ def main():
         bo=(bestSoFar(tenBest))
         a=(averageBest(tenBest))
         permut=removeC(tenBest)
-        print(a)
-        print(bo)
-    print(bo)
-    print(a)
+        best.append(bo)
+        average.append(round(a,5))
+        #print(i, a)
+        #print(i, bo)
+    print(best)
+    print(average)
+    #plt.plot(best)
+    plt.plot(average)
+    
+    
 
 def fitnessFunction(candidates):
     tourCost= []
@@ -207,7 +210,7 @@ def insertMutations(crossOffsprings):
             m1=rand.randint(0,2)
             m2=rand.randint(3,4)
             mut.insert(m1+1,mut[m2])
-            mut.remove(mut[m2])
+            mut.remove(mut[m2+1])
             
     else:
         return crossOffsprings
@@ -218,7 +221,7 @@ def survivalSelection(mutCross, parents):
     parents=parents+costOffspring
     finalParents= addC(parents)
     finalParents=sorted(finalParents, key= lambda x: x[1])
-    finalParents=finalParents[4:]
+    finalParents=finalParents[:10]
     return finalParents
 
 def addC(parents):
@@ -240,7 +243,7 @@ def removeC(parents):
     return c
 
 def bestSoFar(finalParents):
-    bestFitness=finalParents[-1][1]
+    bestFitness=finalParents[0][1]
     return bestFitness
 
 def averageBest(finalParents):
